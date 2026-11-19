@@ -13,9 +13,12 @@ OUT = ROOT / 'ios/qa/simulator'
 OUT.mkdir(parents=True, exist_ok=True)
 
 def run(*args):
-    result = subprocess.run(args, check=True, capture_output=True, text=True, timeout=240)
-    print(result.stdout.strip(), flush=True)
-    return result.stdout
+    print('+ ' + ' '.join(args), flush=True)
+    # Stream commands that start Simulator daemons; inherited capture pipes can
+    # otherwise stay open after a child timeout and hide the current operation.
+    listing = 'list' in args and '-j' in args
+    result = subprocess.run(args, check=True, capture_output=listing, text=True, timeout=300)
+    return result.stdout if listing else ''
 
 devices = json.loads(run('xcrun', 'simctl', 'list', 'devices', 'available', '-j'))['devices']
 candidates = [device for runtime, entries in devices.items() if '.iOS-' in runtime for device in entries if device.get('isAvailable')]
@@ -23,6 +26,10 @@ phone = next(d for d in candidates if d['name'].startswith('iPhone'))
 tablet = next(d for d in candidates if d['name'].startswith('iPad'))
 manifest = []
 for device, language, theme in [(phone, 'en', 'light'), (phone, 'tr', 'dark'), (tablet, 'en', 'light')]:
+    if device is tablet and phone['state'] == 'Booted':
+        # Hosted Apple silicon runners have limited memory; never boot both at once.
+        run('xcrun', 'simctl', 'shutdown', phone['udid'])
+        phone['state'] = 'Shutdown'
     udid = device['udid']
     if device['state'] != 'Booted':
         # Device state is updated after the first boot for the repeated phone run.
@@ -40,5 +47,5 @@ for device, language, theme in [(phone, 'en', 'light'), (phone, 'tr', 'dark'), (
     run('xcrun', 'simctl', 'io', udid, 'screenshot', str(path))
     manifest.append({'device': device['name'], 'language': language, 'theme': theme, 'file': path.name, 'scope': 'simulator launch only'})
     if device is tablet: run('xcrun', 'simctl', 'shutdown', udid)
-run('xcrun', 'simctl', 'shutdown', phone['udid'])
+if phone['state'] == 'Booted': run('xcrun', 'simctl', 'shutdown', phone['udid'])
 (OUT / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
