@@ -55,10 +55,20 @@ def generate():
         # Local TCP discovery is not an arbitrary internet HTTP transport exception.
         'NSAppTransportSecurity': {'NSAllowsLocalNetworking': True},
         'UIFileSharingEnabled': False,
+        'ITSAppUsesNonExemptEncryption': False,
     }
     (APP / 'Info.plist').write_bytes(plistlib.dumps(info, sort_keys=False))
     privacy = {
-        'NSPrivacyTracking': False, 'NSPrivacyTrackingDomains': [], 'NSPrivacyCollectedDataTypes': [],
+        'NSPrivacyTracking': False, 'NSPrivacyTrackingDomains': [],
+        # Conservative disclosure for IP/request metadata visible to the optional
+        # speed-test service; no inventory or completed result history is uploaded.
+        'NSPrivacyCollectedDataTypes': [
+            {'NSPrivacyCollectedDataType': name,
+             'NSPrivacyCollectedDataTypeLinked': True,
+             'NSPrivacyCollectedDataTypeTracking': False,
+             'NSPrivacyCollectedDataTypePurposes': ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics']}
+            for name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData']
+        ],
         'NSPrivacyAccessedAPITypes': [{'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategoryUserDefaults', 'NSPrivacyAccessedAPITypeReasons': ['CA92.1']}],
     }
     (APP / 'PrivacyInfo.xcprivacy').write_bytes(plistlib.dumps(privacy, sort_keys=False))

@@ -78,7 +78,9 @@ struct NetworkView: View {
                 StatusView()
                 if model.busy { ProgressView(value: model.progress) }
                 Button { model.busy ? model.stop() : model.scan() } label: {
-                    Label(model.busy ? model.text("Stop", "Durdur") : model.text("Scan network", "Ağı tara"), systemImage: model.busy ? "stop.fill" : "dot.radiowaves.left.and.right")
+                    Text(model.busy ? model.text("Stop", "Durdur") : model.text("Scan network", "Ağı tara"))
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, minHeight: 32)
                 }.buttonStyle(.borderedProminent)
             }
@@ -174,7 +176,10 @@ struct SpeedView: View {
                 Text(model.text("Uses approximately 5.3 MB plus protocol overhead. The server sees your internet IP. No cellular fallback. This short test estimates transfer speed, not your line’s maximum capacity.", "Protokol ek yükü dışında yaklaşık 5,3 MB kullanır. Sunucu internet IP adresini görür. Hücresel bağlantıya geçmez. Bu kısa test aktarım hızını tahmin eder; hattın azami kapasitesini ölçmez."))
                     .font(.footnote)
                 Button { model.busy ? model.stop() : model.speed() } label: {
-                    Text(model.busy ? model.text("Stop", "Durdur") : model.text("Start speed test", "Hız testini başlat")).frame(maxWidth: .infinity, minHeight: 32)
+                    Text(model.busy ? model.text("Stop", "Durdur") : model.text("Start speed test", "Hız testini başlat"))
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, minHeight: 32)
                 }.buttonStyle(.borderedProminent)
                 StatusView()
             }
