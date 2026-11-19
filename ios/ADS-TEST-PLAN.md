@@ -27,3 +27,7 @@ Use TestFlight 0.2.0 (4). These are pending owner verification; a successful com
 - Hardened consent lifecycle, manual test controls and adaptive banner sizing: commit 88ed3d7. Validation 44612623009; iPhone/iPad UI 44612623079; signed test-ad upload 44612687608. Check final workflow conclusions before reporting success.
 
 References: https://developers.google.com/admob/ios/privacy , https://developers.google.com/admob/ios/privacy/data-disclosure , https://developers.google.com/admob/ios/test-ads .
+
+Signed workflow 44612687608 and validation 44612623009 succeeded. Apple accepted delivery 2baa3b14-9914-4b15-a1c5-c2788f9a8dc9. The existing internal test group shows 0.2.0 (4) as Testing. Local archive metadata confirms test mode and SDK privacy manifests; physical ad presentation remains pending.
+
+UI workflow 44612623079: all three iPad cases and all three iPhone cases passed (English/light, Turkish/dark, accessibility text, portrait/landscape navigation). iPad screenshot en-04-settings-portrait visibly contains the genuine Google Adaptive Banner with Test mode label. This verifies simulator banner delivery and layout, not physical rewarded completion.
