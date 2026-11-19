@@ -54,7 +54,7 @@ struct StatusView: View {
         case "download": return model.text("Measuring download…", "İndirme ölçülüyor…")
         case "upload": return model.text("Measuring upload…", "Yükleme ölçülüyor…")
         case "measurementError": return model.text("Measurement failed. Check Wi-Fi and try again.", "Ölçüm başarısız. Wi-Fi’yi kontrol edip tekrar dene.")
-        case "ports": return model.text("Checking 16 TCP ports…", "16 TCP portu kontrol ediliyor…")
+        case "ports": return model.text("Checking TCP ports…", "TCP portları kontrol ediliyor…")
         case "credit": return model.text("A rewarded ad gives one extended check credit.", "Ödüllü reklam bir ayrıntılı kontrol kredisi verir.")
         default: return model.text("Ready to discover your network", "Ağını keşfetmeye hazır")
         }
@@ -259,7 +259,14 @@ struct SettingsView: View {
                     .disabled(model.busy || ads.busy)
                 Text(model.text("Basic discovery is free. Optional rewarded ads earn extended-check credits.", "Temel keşif ücretsizdir. İsteğe bağlı ödüllü reklamlar ayrıntılı kontrol kredisi verir."))
                     .font(.footnote)
-                if AdConfiguration.testMode { Text(model.text("Test ads", "Test reklamları")).font(.caption) }
+                if AdConfiguration.testMode {
+                    Text(model.text("Test ads", "Test reklamları")).font(.caption)
+                    Button(model.text("Test rewarded ad", "Ödüllü reklamı test et")) { ads.watchReward() }
+                        .disabled(model.busy || ads.busy || !ads.canRequest)
+                    Button(model.text("Test interstitial ad", "Geçiş reklamını test et")) { ads.showTestInterstitial() }
+                        .disabled(model.busy || ads.busy || !ads.canRequest)
+                    Text(model.text("Credits: ", "Kredi: ") + String(ads.credits))
+                }
                 AdStatusView()
                 Link(model.text("Contact EPX Studio", "EPX Studio ile iletişim"), destination: URL(string: "mailto:fatih.parak@hotmail.com")!)
                 Link(model.text("Open iOS settings", "iOS ayarlarını aç"), destination: URL(string: UIApplication.openSettingsURLString)!)

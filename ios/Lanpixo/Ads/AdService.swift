@@ -75,9 +75,10 @@ enum AdConfiguration {
     }
     private func finishConsent() {
         let allowed = ConsentInformation.shared.canRequestAds
-        canRequest = allowed && sdkReady
         privacyRequired = ConsentInformation.shared.privacyOptionsRequirementStatus == .required
         busy = false
+        guard !paused, UIApplication.shared.applicationState == .active else { canRequest = false; return }
+        canRequest = allowed && sdkReady
         if allowed, !initialized {
             initialized = true
             MobileAds.shared.requestConfiguration.setPublisherFirstPartyIDEnabled(false)
@@ -87,8 +88,7 @@ enum AdConfiguration {
                 Task { @MainActor in
                     guard let self else { return }
                     self.sdkReady = true
-                    self.canRequest = ConsentInformation.shared.canRequestAds
-                    self.prepareInterstitial()
+                    self.finishConsent()
                 }
             }
         } else if canRequest { prepareInterstitial() }
@@ -108,10 +108,15 @@ enum AdConfiguration {
     }
     func setNetworkBusy(_ active: Bool) {
         paused = active
-        if active { invalidateAds() }
+        if active { invalidateAds(); canRequest = false }
+        else { resume() }
+    }
+    func resume() {
+        if launched, !paused, !busy { finishConsent() }
     }
     func prepareInterstitial() {
-        guard canRequest, initialized, !paused, !busy, !loadingInterstitial, interstitialAd == nil else { return }
+        guard canRequest, initialized, !paused, !busy, !loadingInterstitial, interstitialAd == nil,
+              UIApplication.shared.applicationState == .active else { return }
         loadingInterstitial = true
         let token = epoch
         Task {
@@ -128,10 +133,25 @@ enum AdConfiguration {
               AdFrequencyPolicy.eligible(completions: completedScans, lastShown: lastFullScreen, now: Date()),
               Date().timeIntervalSince(interstitialLoadedAt) < 3600,
               let ad = interstitialAd, UIApplication.shared.applicationState == .active else { prepareInterstitial(); return }
-        interstitialAd = nil
-        do { try ad.canPresent(from: nil) } catch { prepareInterstitial(); return }
+        do { try ad.canPresent(from: nil) } catch { interstitialAd = nil; prepareInterstitial(); return }
         busy = true; completedScans = 0; lastFullScreen = Date()
         ad.present(from: nil)
+    }
+    func showTestInterstitial() {
+        guard AdConfiguration.testMode, canRequest, !paused, !busy else { return }
+        busy = true; message = "loading"
+        let token = epoch
+        Task {
+            do {
+                let ad = try await InterstitialAd.load(with: AdConfiguration.interstitial, request: AdConfiguration.request())
+                guard token == epoch, canRequest, !paused, UIApplication.shared.applicationState == .active else {
+                    busy = false; message = "adError"; return
+                }
+                try ad.canPresent(from: nil)
+                interstitialAd = ad; ad.fullScreenContentDelegate = self; message = ""
+                ad.present(from: nil)
+            } catch { busy = false; message = "adError" }
+        }
     }
     func watchReward() {
         guard canRequest, !paused, !busy else { return }

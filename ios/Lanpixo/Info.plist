@@ -65,6 +65,8 @@
 	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-4333526146021563~5868530963</string>
+	<key>GADDelayAppMeasurementInit</key>
+	<true/>
 	<key>LanpixoAdEnvironment</key>
 	<string>$(LANPIXO_AD_ENVIRONMENT)</string>
 	<key>SKAdNetworkItems</key>

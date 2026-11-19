@@ -13,6 +13,7 @@ import SwiftUI
                     // System permission dialogs make the scene inactive without
                     // backgrounding it. Let the initial Local Network prompt finish.
                     if phase == .background { model.stop() }
+                    if phase == .active { model.ads.resume() }
                     UIApplication.shared.isIdleTimerDisabled = phase == .active && model.busy
                 }
                 .onChange(of: model.busy) { _, active in

@@ -28,7 +28,7 @@ jobs:
           -configuration Debug -destination 'platform=iOS Simulator,name=${{ matrix.device }},OS=18.5'
           -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1
           -derivedDataPath ios/build-ui -resultBundlePath ios/qa/ui.xcresult
-          CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES CURRENT_PROJECT_VERSION=3 test
+          CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES CURRENT_PROJECT_VERSION=4 LANPIXO_AD_ENVIRONMENT=test test
       - name: Export screenshots and test summary
         if: always()
         run: |

@@ -57,6 +57,7 @@ def generate():
         'UIFileSharingEnabled': False,
         'ITSAppUsesNonExemptEncryption': False,
         'GADApplicationIdentifier': 'ca-app-pub-4333526146021563~5868530963',
+        'GADDelayAppMeasurementInit': True,
         'LanpixoAdEnvironment': '$(LANPIXO_AD_ENVIRONMENT)',
         'SKAdNetworkItems': [{'SKAdNetworkIdentifier': 'cstr6suwn9.skadnetwork'}],
     }
@@ -69,11 +70,12 @@ def generate():
             {'NSPrivacyCollectedDataType': name,
              'NSPrivacyCollectedDataTypeLinked': True,
              'NSPrivacyCollectedDataTypeTracking': False,
-             'NSPrivacyCollectedDataTypePurposes': ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics']}
+             'NSPrivacyCollectedDataTypePurposes': ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics', 'NSPrivacyCollectedDataTypePurposeThirdPartyAdvertising']}
             for name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData',
                          'NSPrivacyCollectedDataTypeCoarseLocation', 'NSPrivacyCollectedDataTypeDeviceID',
                          'NSPrivacyCollectedDataTypeProductInteraction', 'NSPrivacyCollectedDataTypeAdvertisingData',
-                         'NSPrivacyCollectedDataTypeCrashData', 'NSPrivacyCollectedDataTypePerformanceData']
+                         'NSPrivacyCollectedDataTypeCrashData', 'NSPrivacyCollectedDataTypePerformanceData',
+                         'NSPrivacyCollectedDataTypeOtherDiagnosticData']
         ],
         'NSPrivacyAccessedAPITypes': [{'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategoryUserDefaults', 'NSPrivacyAccessedAPITypeReasons': ['CA92.1']}],
     }

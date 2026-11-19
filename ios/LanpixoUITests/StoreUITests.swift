@@ -43,7 +43,11 @@ final class StoreUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Language"].waitForExistence(timeout: 10))
         capture("en-04-settings-portrait", app)
         let privacy = app.buttons["Privacy information"].firstMatch
-        XCTAssertTrue(privacy.exists)
+        for _ in 0..<6 {
+            if privacy.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(privacy.isHittable)
         privacy.tap()
         XCTAssertTrue(app.navigationBars["Privacy"].waitForExistence(timeout: 10))
         capture("en-05-privacy-portrait", app)
