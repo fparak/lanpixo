@@ -22,15 +22,17 @@ import Darwin
         services.forEach { $0.stop(); $0.delegate = nil }; services.removeAll()
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
-        guard services.count < 512 else { return }
+        guard browsers.contains(where: { $0 === browser }), services.count < 512 else { return }
         services.append(service); service.delegate = self
         service.schedule(in: .main, forMode: .common)
         service.resolve(withTimeout: 4)
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String: NSNumber]) {
+        guard browsers.contains(where: { $0 === browser }) else { return }
         if errorDict[NetService.errorCode]?.intValue == -72008 { onDenied?() }
     }
     func netServiceDidResolveAddress(_ sender: NetService) {
+        guard services.contains(where: { $0 === sender }) else { return }
         for data in sender.addresses ?? [] {
             guard data.count >= MemoryLayout<sockaddr_in>.size else { continue }
             var address = sockaddr_in()

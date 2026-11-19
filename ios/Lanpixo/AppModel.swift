@@ -168,7 +168,9 @@ import Network
             let ports: [UInt16] = [21,22,23,25,53,80,110,139,143,443,445,554,3389,8008,8009,9100]
             for port in ports {
                 guard !Task.isCancelled, runID == id else { return }
-                portResults[port] = await TCPProbe().run(ip: ip, port: port)
+                let result = await TCPProbe().run(ip: ip, port: port)
+                guard !Task.isCancelled, runID == id else { return }
+                portResults[port] = result
             }
             guard runID == id else { return }
             busy = false; snapshot = nil; operation = nil; status = "complete"

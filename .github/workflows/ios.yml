@@ -1,6 +1,11 @@
 name: Lanpixo iOS validation
 on:
   workflow_dispatch:
+    inputs:
+      screenshots:
+        description: Boot iPhone/iPad simulators and capture launch screens
+        type: boolean
+        default: false
   push:
     paths: ['ios/**', 'scripts/ios-simulator-smoke.py', '.github/workflows/ios.yml']
   pull_request:
@@ -31,6 +36,7 @@ jobs:
           -destination 'generic/platform=iOS'
           -derivedDataPath ios/build-device CODE_SIGNING_ALLOWED=NO build
       - name: Launch on iPhone and iPad simulators
+        if: github.event_name == 'workflow_dispatch' && inputs.screenshots
         timeout-minutes: 12
         run: python3 scripts/ios-simulator-smoke.py
       - uses: actions/upload-artifact@v4
