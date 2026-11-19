@@ -33,7 +33,7 @@ final class StoreUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["No scans yet"].waitForExistence(timeout: 10))
         capture("en-03-history-portrait", app)
         tab("Settings", app: app)
-        XCTAssertTrue(app.buttons["Language"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Language"].waitForExistence(timeout: 10))
         capture("en-04-settings-portrait", app)
         let privacy = app.buttons["Privacy information"].firstMatch
         XCTAssertTrue(privacy.exists)
@@ -65,7 +65,7 @@ final class StoreUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Henüz tarama yok"].waitForExistence(timeout: 10))
         capture("tr-03-history-portrait", app)
         tab("Ayarlar", app: app)
-        XCTAssertTrue(app.buttons["Dil"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Dil"].waitForExistence(timeout: 10))
         capture("tr-04-settings-portrait", app)
         app.terminate()
     }
