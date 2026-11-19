@@ -147,7 +147,7 @@ import Network
         operation = Task {
             do {
                 let result = try await SpeedMeasurement.run { [weak self] phase in
-                    await MainActor.run { if self?.runID == id { self?.status = phase } }
+                    if self?.runID == id { self?.status = phase }
                 }
                 guard runID == id, !Task.isCancelled else { return }
                 speeds.insert(result, at: 0); speeds = Array(speeds.prefix(20)); save(speeds, key: "speeds"); status = "complete"

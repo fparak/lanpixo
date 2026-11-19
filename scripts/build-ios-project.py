@@ -103,7 +103,7 @@ def generate():
                 settings.update({'PRODUCT_BUNDLE_IDENTIFIER': 'com.netora.scanner', 'PRODUCT_NAME': '$(TARGET_NAME)',
                     'INFOPLIST_FILE': 'Lanpixo/Info.plist', 'GENERATE_INFOPLIST_FILE': 'NO', 'MARKETING_VERSION': '0.1.0',
                     'CURRENT_PROJECT_VERSION': '1', 'TARGETED_DEVICE_FAMILY': '1,2', 'CODE_SIGN_STYLE': 'Automatic',
-                    'ASSETCATALOG_COMPILER_APPICON_NAME': 'AppIcon', 'ENABLE_PREVIEWS': 'YES',
+                    'ASSETCATALOG_COMPILER_APPICON_NAME': 'AppIcon', 'ENABLE_PREVIEWS': 'YES', 'DEVELOPMENT_TEAM': 'M64GVYHN8L',
                     'SUPPORTS_MACCATALYST': 'NO', 'SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD': 'NO'})
             values = ' '.join(f'{k} = {quote(v)};' for k, v in settings.items())
             obj(f'{scope}:{config}', f'isa = XCBuildConfiguration; buildSettings = {{ {values} }}; name = {config};')

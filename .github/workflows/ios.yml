@@ -2,9 +2,9 @@ name: Lanpixo iOS validation
 on:
   workflow_dispatch:
   push:
-    paths: ['ios/**', '.github/workflows/ios.yml']
+    paths: ['ios/**', 'scripts/ios-simulator-smoke.py', '.github/workflows/ios.yml']
   pull_request:
-    paths: ['ios/**', '.github/workflows/ios.yml']
+    paths: ['ios/**', 'scripts/ios-simulator-smoke.py', '.github/workflows/ios.yml']
 permissions:
   contents: read
 jobs:
@@ -30,6 +30,15 @@ jobs:
           -configuration Release -sdk iphoneos
           -destination 'generic/platform=iOS'
           -derivedDataPath ios/build-device CODE_SIGNING_ALLOWED=NO build
+      - name: Launch on iPhone and iPad simulators
+        run: python3 scripts/ios-simulator-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Lanpixo-iOS-simulator-screenshots
+          path: ios/qa/simulator
+          if-no-files-found: ignore
+          retention-days: 7
       - uses: actions/upload-artifact@v4
         with:
           name: Lanpixo-iOS-simulator

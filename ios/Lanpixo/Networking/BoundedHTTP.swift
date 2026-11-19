@@ -57,7 +57,7 @@ final class BoundedHTTP: NSObject, URLSessionDataDelegate, @unchecked Sendable {
 }
 
 enum SpeedMeasurement {
-    static func run(update: @escaping @Sendable (String) async -> Void) async throws -> SpeedResult {
+    static func run(update: @escaping @MainActor @Sendable (String) -> Void) async throws -> SpeedResult {
         let clock = ContinuousClock()
         let deadline = clock.now.advanced(by: .seconds(60))
         let base = "https://fra.speedtest.clouvider.net/backend"
