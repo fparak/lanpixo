@@ -1,0 +1,47 @@
+name: Lanpixo iPad and store screenshots
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/ios-ui.yml', 'ios/LanpixoUITests/**', 'scripts/build-ios-ui-tests.py']
+permissions:
+  contents: read
+jobs:
+  ui:
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ['iPad Pro 13-inch (M4)', 'iPhone 16 Pro Max']
+    runs-on: macos-15
+    timeout-minutes: 35
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare isolated UI test scheme
+        run: |
+          xcodebuild -version
+          python3 scripts/build-ios-ui-tests.py
+          xcrun simctl list devices available
+      - name: Test real screens and capture attachments
+        run: >-
+          xcodebuild -project ios/Lanpixo.xcodeproj -scheme LanpixoUI
+          -configuration Debug -destination 'platform=iOS Simulator,name=${{ matrix.device }},OS=18.5'
+          -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1
+          -derivedDataPath ios/build-ui -resultBundlePath ios/qa/ui.xcresult
+          CODE_SIGNING_ALLOWED=NO test
+      - name: Export screenshots and test summary
+        if: always()
+        run: |
+          mkdir -p ios/qa/ui-screenshots
+          if test -d ios/qa/ui.xcresult; then
+            xcrun xcresulttool export attachments --path ios/qa/ui.xcresult --output-path ios/qa/ui-screenshots
+            xcrun xcresulttool get test-results summary --path ios/qa/ui.xcresult > ios/qa/ui-summary.json
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: UI-${{ matrix.device }}
+          path: |
+            ios/qa/ui-screenshots
+            ios/qa/ui-summary.json
+          retention-days: 14
