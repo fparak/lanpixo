@@ -1,5 +1,9 @@
 # Lanpixo iOS — release preparation, 19 November 2026
 
+## Subsequent owner testing and advertising work
+
+The owner subsequently installed TestFlight 0.1.0 (3), reported that all devices matched the router list, and reported no functional problems. These are owner-reported results, not an independent device inspection. The remaining sections below preserve the original ad-free release-preparation history. Advertising version 0.2.0 has separate verification and release gates in `ADS-TEST-PLAN.md`; the old privacy statement and screenshots must not be assumed to cover it.
+
 The requested iPad UI testing, privacy declarations and store screenshot preparation are complete. This is preparation for release, not an App Review submission or proof of discovery on a physical Wi-Fi network.
 
 ## Tested
@@ -39,3 +43,8 @@ The initial UI run failed because a picker label was queried as a button instead
 ## Deferred to the owner / next stage
 
 The owner explicitly deferred TestFlight installation and real-network tests. Do not report a successful physical iPhone scan, speed benchmark, router comparison, permission allow/deny flow, export of a real device list, or device-specific background/network-change behavior until those results are supplied. TestFlight processing/installation availability for build 3 has not been asserted here. No invitation was sent and no App Review submission was made. Final release readiness also depends on real-device results and any remaining App Store compliance/account requirements.
+
+
+## TestFlight invitation update
+
+On 19 November 2026 the owner requested the test invitation. Build 0.1.0 (3) finished processing and was added to the internal Lanpixo Device Tests group. The existing account holder was invited; App Store Connect showed Invited, one tester and one build, with the build Ready to Test. Automatic distribution is off. Installation and physical-network results are still unverified. Proof and compact status are in qa/testflight-invitation-sent-20261119.jpg and qa/testflight-invitation-status.json. Earlier no-invitation notes describe the preceding release-preparation stage.
