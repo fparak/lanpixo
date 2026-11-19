@@ -5,7 +5,14 @@ final class StoreUITests: XCTestCase {
     override func setUpWithError() throws { continueAfterFailure = false }
 
     private func capture(_ name: String, _ app: XCUIApplication) {
-        let image = XCTAttachment(screenshot: app.screenshot())
+        // Allow rotation/SwiftUI transitions to settle, then capture the actual
+        // screen. app.screenshot() can retain portrait bounds during rotation.
+        Thread.sleep(forTimeInterval: 1.5)
+        let screenshot = XCUIScreen.main.screenshot()
+        if name.contains("landscape") {
+            XCTAssertGreaterThan(screenshot.image.size.width, screenshot.image.size.height)
+        }
+        let image = XCTAttachment(screenshot: screenshot)
         image.name = name
         image.lifetime = .keepAlways
         add(image)
@@ -41,6 +48,11 @@ final class StoreUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Privacy"].waitForExistence(timeout: 10))
         capture("en-05-privacy-portrait", app)
         XCUIDevice.shared.orientation = .landscapeLeft
+        let landscape = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let bounds = app.windows.firstMatch.frame
+            return bounds.width > bounds.height
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 15), .completed)
         tab("Network", app: app)
         XCTAssertTrue(app.buttons["Scan network"].waitForExistence(timeout: 10))
         capture("en-06-network-landscape", app)
