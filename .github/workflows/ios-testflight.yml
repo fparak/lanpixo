@@ -1,0 +1,71 @@
+name: Lanpixo signed TestFlight build
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: Unique App Store Connect build number
+        required: true
+        default: '1'
+      upload:
+        description: Upload signed IPA to TestFlight (requires configured signing secrets)
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+jobs:
+  archive:
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      APPLE_TEAM_ID: M64GVYHN8L
+      BUILD_NUMBER: ${{ inputs.build_number }}
+      SHOULD_UPLOAD: ${{ inputs.upload }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import signing inputs into temporary keychain
+        env:
+          P12_BASE64: ${{ secrets.APPLE_DISTRIBUTION_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_P12_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: bash scripts/ios-signing-setup.sh
+      - name: Core tests
+        working-directory: ios
+        run: swift test
+      - name: Archive signed app
+        run: |
+          set -euo pipefail
+          [[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]]
+          xcodebuild -project ios/Lanpixo.xcodeproj -scheme Lanpixo \
+            -configuration Release -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Lanpixo.xcarchive" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY='Apple Distribution' \
+            PROVISIONING_PROFILE_SPECIFIER="$LANPIXO_PROFILE_NAME" \
+            CURRENT_PROJECT_VERSION="$BUILD_NUMBER" archive
+      - name: Validate and export IPA
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/Lanpixo.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/LanpixoExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/LanpixoExport"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Lanpixo-signed-IPA-${{ inputs.build_number }}
+          path: ${{ runner.temp }}/LanpixoExport/*.ipa
+          retention-days: 7
+      - name: Upload to App Store Connect
+        if: inputs.upload
+        run: |
+          set -euo pipefail
+          xcrun altool --upload-app -t ios \
+            -f "$RUNNER_TEMP/LanpixoExport/Lanpixo.ipa" \
+            --apiKey "$LANPIXO_ASC_KEY_ID" --apiIssuer "$LANPIXO_ASC_ISSUER_ID"
+      - name: Remove temporary signing material
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/lanpixo-signing.keychain-db" || true
+          python3 scripts/ios-signing-cleanup.py
