@@ -33,3 +33,5 @@ Signed workflow 44612687608 and validation 44612623009 succeeded. Apple accepted
 UI workflow 44612623079: all three iPad cases and all three iPhone cases passed (English/light, Turkish/dark, accessibility text, portrait/landscape navigation). iPad screenshot en-04-settings-portrait visibly contains the genuine Google Adaptive Banner with Test mode label. This verifies simulator banner delivery and layout, not physical rewarded completion.
 
 20 November 2026: owner reports ads worked and reward credit was received on hardware; requests production-unit activation. Early-close, crash recovery and consent-rejection outcomes were not separately reported. Live configuration is being built as 0.2.0 (5).
+
+Apple finished processing 0.2.0 (5); it was added to the existing Lanpixo Device Tests group and visibly showed Testing. Local proof: ios/qa/ads-live-build5-testing.jpg. The IPA has LanpixoAdEnvironment=live and uses the provided iOS units; release defaults outside the explicit live archive workflow remain test for safer development. No live-ad interaction was performed by the agent.
