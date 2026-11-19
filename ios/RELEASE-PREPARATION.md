@@ -1,0 +1,41 @@
+# Lanpixo iOS — release preparation, 19 November 2026
+
+The requested iPad UI testing, privacy declarations and store screenshot preparation are complete. This is preparation for release, not an App Review submission or proof of discovery on a physical Wi-Fi network.
+
+## Tested
+
+| Device / environment | Evidence | Result |
+| --- | --- | --- |
+| iPad Pro 13-inch M4, iPadOS 18.5 Simulator | UI workflow 44443034762, source c9a40da | 3 UI cases passed, 0 failures |
+| iPhone 16 Pro Max, iOS 18.5 Simulator | UI workflow 44443034762, source c9a40da | 3 UI cases passed, 0 failures |
+| iPad stable landscape capture, same app code | UI workflow 44443034762, source c9a40da | 3 UI cases passed; actual landscape screenshot inspected without transition letterboxing |
+| Simulator / iPhoneOS compile and core XCTest | Validation workflow 44443034723 | Passed |
+| Signed Release archive, export, core XCTest and upload | Signed workflow 44443090821 | Passed, Apple accepted 0.1.0 (3) |
+
+UI cases cover English/light Network, Speed, History, Settings and Privacy screens, reachable tab navigation, landscape Network/Speed, Turkish/dark screens, and accessibility text size. A visual check caught truncation of the scan action at the largest text size; fixed multiline vertical sizing and verified the complete label in a fresh screenshot. Store portrait images come from the preceding all-green workflow 44442330758 (identical application code, before the capture-harness-only adjustment). Tests do not start discovery or perform an internet speed test. Automated accessibility checks are not a complete VoiceOver audit; no App Store accessibility feature claims were made.
+
+The initial UI run failed because a picker label was queried as a button instead of static text. A subsequent image revealed app-window capture during the rotation transition; the capture harness now waits for landscape window bounds and captures the full screen. These earlier attempts are retained as history, not counted as passing suites.
+
+## Privacy and store assets
+
+- Public TR/EN policy: https://epx-studio.com/privacy/lanpixo-ios.html . Verified HTTPS 200 and content match after deployment; Android policy was left intact.
+- App Store Connect App Privacy published with explicit owner approval. Other Data / Other Usage Data, linked, functionality/analytics, no tracking; rationale in `PRIVACY-DISCLOSURE.md`.
+- Embedded manifest matches the disclosed speed-test connection data; no advertising or purchase SDK. UserDefaults reason CA92.1. Apple's OS-only HTTPS use declared exempt in Info.plist.
+- 12 genuine store cards: 3 screens × 2 languages × 2 device families. Native UI screenshots are unaltered inside vector caption layouts; no fabricated devices or speeds.
+- Required canvases: iPhone medium Dynamic Island 1206×2622 and iPad 13-inch 2064×2752. All exported PNGs validated RGB without alpha, correct dimensions, and source image hashes.
+- English and Turkish iPhone/iPad sets each show 3 of 10 App Screenshots after reloading App Store Connect. These are custom localized assets, not inherited English placeholders.
+- Local editable SVG layouts and RGB PNGs are under `app-store/screenshots/`; provenance in `manifest.json`. The export bundle is `../releases/lanpixo-ios-store-assets.zip`. Generated images are stored in this workspace and App Store Connect; repository scripts can regenerate them from the recorded XCTest artifacts. Local upload proof: `qa/store-tr-iphone-uploaded.jpg`, `qa/store-tr-ipad-uploaded.jpg`.
+
+## Current binary
+
+- Bundle: com.netora.scanner; version 0.1.0, build 3.
+- Apple upload accepted 19 November 2026 at 05:18:58 Türkiye time (02:18:58 UTC).
+- Delivery UUID: 08ebc0a1-5025-47f5-910e-1dda662fbad0.
+- Local IPA: `../releases/lanpixo-ios-0.1.0-3.ipa`.
+- SHA256: d6f82fd20149ddd0f1d0d13d8427ecbba6ae0614e2d8c117dde122ab2eb709ff.
+- Public workflow evidence: https://github.com/fparak/lanpixo/actions/runs/44443090821 . Public source: https://github.com/fparak/lanpixo .
+- A non-blocking upload notice says iOS 27 SDK will be required from April 2027; this upload succeeded with the present SDK.
+
+## Deferred to the owner / next stage
+
+The owner explicitly deferred TestFlight installation and real-network tests. Do not report a successful physical iPhone scan, speed benchmark, router comparison, permission allow/deny flow, export of a real device list, or device-specific background/network-change behavior until those results are supplied. TestFlight processing/installation availability for build 3 has not been asserted here. No invitation was sent and no App Review submission was made. Final release readiness also depends on real-device results and any remaining App Store compliance/account requirements.

@@ -1,0 +1,14 @@
+{
+  "bundle": "com.netora.scanner",
+  "version": "0.1.0",
+  "build": "3",
+  "sha256": "d6f82fd20149ddd0f1d0d13d8427ecbba6ae0614e2d8c117dde122ab2eb709ff",
+  "source": "c9a40dabd17904757ae28ab2d6846888025b8ea3",
+  "upload": "Apple accepted",
+  "deliveryUUID": "08ebc0a1-5025-47f5-910e-1dda662fbad0",
+  "workflow": "https://github.com/fparak/lanpixo/actions/runs/44443090821",
+  "privacyDataTypes": [
+    "NSPrivacyCollectedDataTypeOtherDataTypes",
+    "NSPrivacyCollectedDataTypeOtherUsageData"
+  ]
+}

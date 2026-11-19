@@ -1,0 +1,122 @@
+[
+  {
+    "svg": "en-US\\iphone\\01-network.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\5D2E4CB4-9C2A-4120-BC87-3A2B2151556C.png",
+    "sourceSHA256": "5b88ab6d47552296d6109291c14ab1615178627044108d8d3279bb821b0a189a",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "en-01-network-portrait_0_5DC501AC-AEDE-4CF3-A7DB-64565963D62E.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "en-US\\iphone\\02-speed.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\E3A0CD60-AC61-419F-A61A-4C1429256922.png",
+    "sourceSHA256": "92354d20c7c75db6f1a5b8efaa4e854c971fde322c6edca32a395ba05e2af9a8",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "en-02-speed-portrait_0_4DCAFBE5-5BEA-491B-9465-43C42C79282B.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "en-US\\iphone\\03-settings.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\B65C6F02-9D4E-4C53-8463-D41179943032.png",
+    "sourceSHA256": "03bea04ca2546e3794325f03ad3829c4ea09f99b165793a20b76139d21f2d531",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "en-04-settings-portrait_0_378F56BB-B92D-45CD-A559-9C40F1D9D9FD.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\iphone\\01-network.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\6220DF50-9C72-4D87-93E3-7FF1F2953852.png",
+    "sourceSHA256": "c3fe5fdac1376eb3fd370c48c460090994d2125627a9dca231fad6cacd1f57b9",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "tr-01-network-portrait_0_1C4820BB-0B73-424A-AB93-F771597D1745.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\iphone\\02-speed.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\1D60DFA9-6C69-4844-9262-E1C4884E5179.png",
+    "sourceSHA256": "d7e2eae0579f76336bfa16367746bc1e33d1b2907486933861422a236d2e9e96",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "tr-02-speed-portrait_0_60102C37-DAC1-454F-BF16-BE8C3CBC943C.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\iphone\\03-settings.svg",
+    "width": 1206,
+    "height": 2622,
+    "source": "ios\\qa\\phone-ui-3\\ui-screenshots\\A8A301F4-9F64-42CB-A44E-41D782B8EF61.png",
+    "sourceSHA256": "1d53cdfb77f56fd66454ee5b89dd62e6ac637b4f8f1c85df7d2cea1b10b74241",
+    "device": "iPhone 16 Pro Max",
+    "testScreen": "tr-04-settings-portrait_0_70324CED-6014-4EAE-AAF3-3DF7A1CF7887.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "en-US\\ipad\\01-network.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\8C11973D-3EEC-4018-9947-6657DACB6529.png",
+    "sourceSHA256": "aa456682166d4c4f58e75c276b8b55bd8cf439528584972ec0747018097674aa",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "en-01-network-portrait_0_E1848B46-0FD3-4704-9616-964F7753B9F4.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "en-US\\ipad\\02-speed.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\34AF0BEC-9A4E-41DB-A3BA-27B7005A6430.png",
+    "sourceSHA256": "96b5c60a2a25330c387751d1aca6539e5ee1f9e28f8bdc20aa83583220992cbb",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "en-02-speed-portrait_0_8F7C8862-D965-4244-B151-80B5ED8BB174.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "en-US\\ipad\\03-settings.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\2ACCAB64-15AF-49E0-8E58-201DB2A225ED.png",
+    "sourceSHA256": "0cb3ed6c2176b70eb2b6cd26f4bcdcf3361d608827ad71c62c66a9a56ceab9ca",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "en-04-settings-portrait_0_4B5253E2-463A-4255-82AD-45F6BAE561C3.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\ipad\\01-network.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\318F0B13-063F-4D08-B439-B0E0E44185B0.png",
+    "sourceSHA256": "90c8510d85f804d522b8c7c9839788c2339fe6d556a15a92c3f34468102ea229",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "tr-01-network-portrait_0_E5EAC223-5D35-4A37-95C2-098E7DA58224.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\ipad\\02-speed.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\B702C7C3-E4CB-4D8D-BBC6-F7CAEEB28463.png",
+    "sourceSHA256": "396b39219046840c99bceb03ec9cfd37903e500cbd18cdd1b28d8a8f75ee1fe9",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "tr-02-speed-portrait_0_ED079881-B3FB-4E45-8D78-510DC81B5B5C.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  },
+  {
+    "svg": "tr\\ipad\\03-settings.svg",
+    "width": 2064,
+    "height": 2752,
+    "source": "ios\\qa\\ipad-ui-3\\ui-screenshots\\E7B11C9D-7D2F-445F-B9DD-37BEBE989BE4.png",
+    "sourceSHA256": "6b750549e947627a1faff3ecb957f9963cea575cc540c1ad0bb5c914fadacf6e",
+    "device": "iPad Pro 13-inch (M4)",
+    "testScreen": "tr-04-settings-portrait_0_F65F94A2-2F60-4C25-8C6C-46BB7F98DDDB.png",
+    "scope": "Actual UI screenshot, editorial caption; no discovery/measurement result fabricated"
+  }
+]

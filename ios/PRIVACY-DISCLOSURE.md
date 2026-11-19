@@ -33,4 +33,6 @@ Sources checked 19 November 2026:
 
 Apple defines collection as access beyond servicing a real-time request. Because retention at the external endpoint is unverified, do not select “No data collected.” These are conservative declarations, not an audit of the external server's logs. Reassess if the endpoint, ads, purchases or telemetry changes.
 
-Publishing the responses requires the owner's action-time approval of Apple's accuracy/compliance/update undertaking. Draft responses were saved; final publication status must be recorded after the confirmation succeeds.
+The owner explicitly approved Apple's accuracy/compliance/update undertaking. The responses were published on 19 November 2026; App Store Connect showed “Published … by Fatih Parak.” Both English and Turkish policy URLs were saved. Local proof: `qa/privacy-published-20261119.jpg`.
+
+Build 3's embedded PrivacyInfo.xcprivacy also declares these two data types with linked=true, tracking=false, App Functionality and Analytics purposes. UserDefaults retains required-reason CA92.1. No tracking domains are declared. Info.plist declares no non-exempt encryption; the app only uses the operating system's HTTPS implementation.
