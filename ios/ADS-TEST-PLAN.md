@@ -31,3 +31,5 @@ References: https://developers.google.com/admob/ios/privacy , https://developers
 Signed workflow 44612687608 and validation 44612623009 succeeded. Apple accepted delivery 2baa3b14-9914-4b15-a1c5-c2788f9a8dc9. The existing internal test group shows 0.2.0 (4) as Testing. Local archive metadata confirms test mode and SDK privacy manifests; physical ad presentation remains pending.
 
 UI workflow 44612623079: all three iPad cases and all three iPhone cases passed (English/light, Turkish/dark, accessibility text, portrait/landscape navigation). iPad screenshot en-04-settings-portrait visibly contains the genuine Google Adaptive Banner with Test mode label. This verifies simulator banner delivery and layout, not physical rewarded completion.
+
+20 November 2026: owner reports ads worked and reward credit was received on hardware; requests production-unit activation. Early-close, crash recovery and consent-rejection outcomes were not separately reported. Live configuration is being built as 0.2.0 (5).

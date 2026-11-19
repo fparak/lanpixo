@@ -48,3 +48,9 @@ The owner explicitly deferred TestFlight installation and real-network tests. Do
 ## TestFlight invitation update
 
 On 19 November 2026 the owner requested the test invitation. Build 0.1.0 (3) finished processing and was added to the internal Lanpixo Device Tests group. The existing account holder was invited; App Store Connect showed Invited, one tester and one build, with the build Ready to Test. Automatic distribution is off. Installation and physical-network results are still unverified. Proof and compact status are in qa/testflight-invitation-sent-20261119.jpg and qa/testflight-invitation-status.json. Earlier no-invitation notes describe the preceding release-preparation stage.
+
+## Live advertising update — 20 November 2026
+
+The owner reports working ads and receipt of a rewarded credit in 0.2.0 (4). The live-unit 0.2.0 (5) archive was built and accepted by Apple in workflow 44620092863, source d669af8; five core tests and unsigned simulator/device validation 44620042528 passed. The exported IPA was inspected for live ad environment, correct iOS AdMob app ID, version/build, embedded SDK privacy manifests and signature files. SHA256: 2d6dc6f6d2845cd993801d7a1d77a4e5deff2dc140a8185512b96e8824d14ea4. This does not establish live ad fill on hardware.
+
+The separate bilingual advertising policy is public and exact-content checked over HTTPS. App Store privacy was updated to nine data types and both localized policy links were saved. Details and purpose/linkage decisions are in PRIVACY-ADS-DRAFT.md (retained filename, now published). Existing website policies were preserved. No new Apple agreement appeared during the existing-declaration edits. No App Review submission was made.
