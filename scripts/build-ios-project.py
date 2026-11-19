@@ -64,13 +64,17 @@ def generate():
     (APP / 'Info.plist').write_bytes(plistlib.dumps(info, sort_keys=False))
     privacy = {
         'NSPrivacyTracking': False, 'NSPrivacyTrackingDomains': [],
-        # Conservative disclosure for IP/request metadata visible to the optional
-        # speed-test service; no inventory or completed result history is uploaded.
+        # Speed-test metadata plus restricted, non-personalized Google ads.
+        # SDK manifests remain embedded separately and must not be rewritten.
         'NSPrivacyCollectedDataTypes': [
             {'NSPrivacyCollectedDataType': name,
-             'NSPrivacyCollectedDataTypeLinked': True,
+             'NSPrivacyCollectedDataTypeLinked': name not in ['NSPrivacyCollectedDataTypeCrashData', 'NSPrivacyCollectedDataTypeOtherDiagnosticData'],
              'NSPrivacyCollectedDataTypeTracking': False,
-             'NSPrivacyCollectedDataTypePurposes': ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics', 'NSPrivacyCollectedDataTypePurposeThirdPartyAdvertising']}
+             'NSPrivacyCollectedDataTypePurposes':
+                 ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics']
+                 if name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData']
+                 else ['NSPrivacyCollectedDataTypePurposeAnalytics'] if name == 'NSPrivacyCollectedDataTypeCrashData'
+                 else ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics', 'NSPrivacyCollectedDataTypePurposeThirdPartyAdvertising']}
             for name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData',
                          'NSPrivacyCollectedDataTypeCoarseLocation', 'NSPrivacyCollectedDataTypeDeviceID',
                          'NSPrivacyCollectedDataTypeProductInteraction', 'NSPrivacyCollectedDataTypeAdvertisingData',
