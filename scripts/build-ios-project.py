@@ -56,6 +56,9 @@ def generate():
         'NSAppTransportSecurity': {'NSAllowsLocalNetworking': True},
         'UIFileSharingEnabled': False,
         'ITSAppUsesNonExemptEncryption': False,
+        'GADApplicationIdentifier': 'ca-app-pub-4333526146021563~5868530963',
+        'LanpixoAdEnvironment': '$(LANPIXO_AD_ENVIRONMENT)',
+        'SKAdNetworkItems': [{'SKAdNetworkIdentifier': 'cstr6suwn9.skadnetwork'}],
     }
     (APP / 'Info.plist').write_bytes(plistlib.dumps(info, sort_keys=False))
     privacy = {
@@ -67,7 +70,10 @@ def generate():
              'NSPrivacyCollectedDataTypeLinked': True,
              'NSPrivacyCollectedDataTypeTracking': False,
              'NSPrivacyCollectedDataTypePurposes': ['NSPrivacyCollectedDataTypePurposeAppFunctionality', 'NSPrivacyCollectedDataTypePurposeAnalytics']}
-            for name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData']
+            for name in ['NSPrivacyCollectedDataTypeOtherDataTypes', 'NSPrivacyCollectedDataTypeOtherUsageData',
+                         'NSPrivacyCollectedDataTypeCoarseLocation', 'NSPrivacyCollectedDataTypeDeviceID',
+                         'NSPrivacyCollectedDataTypeProductInteraction', 'NSPrivacyCollectedDataTypeAdvertisingData',
+                         'NSPrivacyCollectedDataTypeCrashData', 'NSPrivacyCollectedDataTypePerformanceData']
         ],
         'NSPrivacyAccessedAPITypes': [{'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategoryUserDefaults', 'NSPrivacyAccessedAPITypeReasons': ['CA92.1']}],
     }
@@ -100,7 +106,10 @@ def generate():
         builds = [uid('build:' + p) for p in paths]
         if phase == 'resources': builds.append(uid('build:localization'))
         obj(phase, f'isa = PBX{phase.title()}BuildPhase; buildActionMask = 2147483647; files = ({", ".join(builds)},); runOnlyForDeploymentPostprocessing = 0;')
-    obj('frameworks', 'isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;')
+    obj('ads:package', 'isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git"; requirement = { kind = exactVersion; version = 13.13.0; };')
+    obj('ads:product', f'isa = XCSwiftPackageProductDependency; package = {uid("ads:package")}; productName = GoogleMobileAds;')
+    obj('ads:build', f'isa = PBXBuildFile; productRef = {uid("ads:product")};')
+    obj('frameworks', f'isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ({uid("ads:build")},); runOnlyForDeploymentPostprocessing = 0;')
     for scope in ['project', 'target']:
         for config in ['Debug', 'Release']:
             settings = {
@@ -111,15 +120,16 @@ def generate():
             else: settings.update({'SWIFT_OPTIMIZATION_LEVEL': '-O', 'DEBUG_INFORMATION_FORMAT': 'dwarf-with-dsym'})
             if scope == 'target':
                 settings.update({'PRODUCT_BUNDLE_IDENTIFIER': 'com.netora.scanner', 'PRODUCT_NAME': '$(TARGET_NAME)',
-                    'INFOPLIST_FILE': 'Lanpixo/Info.plist', 'GENERATE_INFOPLIST_FILE': 'NO', 'MARKETING_VERSION': '0.1.0',
+                    'INFOPLIST_FILE': 'Lanpixo/Info.plist', 'GENERATE_INFOPLIST_FILE': 'NO', 'MARKETING_VERSION': '0.2.0',
                     'CURRENT_PROJECT_VERSION': '1', 'TARGETED_DEVICE_FAMILY': '1,2', 'CODE_SIGN_STYLE': 'Automatic',
+                    'LANPIXO_AD_ENVIRONMENT': 'test',
                     'ASSETCATALOG_COMPILER_APPICON_NAME': 'AppIcon', 'ENABLE_PREVIEWS': 'YES', 'DEVELOPMENT_TEAM': 'M64GVYHN8L',
                     'SUPPORTS_MACCATALYST': 'NO', 'SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD': 'NO'})
             values = ' '.join(f'{k} = {quote(v)};' for k, v in settings.items())
             obj(f'{scope}:{config}', f'isa = XCBuildConfiguration; buildSettings = {{ {values} }}; name = {config};')
         obj(scope + ':configs', f'isa = XCConfigurationList; buildConfigurations = ({uid(scope + ":Debug")}, {uid(scope + ":Release")},); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;')
-    obj('target', f'isa = PBXNativeTarget; buildConfigurationList = {uid("target:configs")}; buildPhases = ({uid("sources")}, {uid("frameworks")}, {uid("resources")},); buildRules = (); dependencies = (); name = Lanpixo; productName = Lanpixo; productReference = {uid("app")}; productType = "com.apple.product-type.application";')
-    obj('project', f'isa = PBXProject; attributes = {{ BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 2600; }}; buildConfigurationList = {uid("project:configs")}; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, tr, Base,); mainGroup = {uid("rootGroup")}; productRefGroup = {uid("products")}; projectDirPath = ""; projectRoot = ""; targets = ({uid("target")},);')
+    obj('target', f'isa = PBXNativeTarget; buildConfigurationList = {uid("target:configs")}; buildPhases = ({uid("sources")}, {uid("frameworks")}, {uid("resources")},); buildRules = (); dependencies = (); packageProductDependencies = ({uid("ads:product")},); name = Lanpixo; productName = Lanpixo; productReference = {uid("app")}; productType = "com.apple.product-type.application";')
+    obj('project', f'isa = PBXProject; attributes = {{ BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 2600; }}; buildConfigurationList = {uid("project:configs")}; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, tr, Base,); mainGroup = {uid("rootGroup")}; productRefGroup = {uid("products")}; projectDirPath = ""; projectRoot = ""; packageReferences = ({uid("ads:package")},); targets = ({uid("target")},);')
     PROJECT.mkdir(exist_ok=True)
     (PROJECT / 'project.pbxproj').write_text('// !$*UTF8*$!\n{\n\tarchiveVersion = 1;\n\tclasses = {};\n\tobjectVersion = 56;\n\tobjects = {\n' + '\n'.join(objects) + '\n\t};\n\trootObject = ' + uid('project') + ';\n}\n', encoding='utf-8')
     scheme = PROJECT / 'xcshareddata/xcschemes'; scheme.mkdir(parents=True, exist_ok=True)

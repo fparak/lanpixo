@@ -41,7 +41,9 @@ assert len(types) == len(set(types)) == 12
 bonjour = (app / 'Networking/BonjourDiscovery.swift').read_text(encoding='utf-8')
 assert all('"' + name + '"' in bonjour for name in types)
 assert not info.get('NSAppTransportSecurity', {}).get('NSAllowsArbitraryLoads', False)
-assert 'GADApplicationIdentifier' not in info
+assert info['GADApplicationIdentifier'] == 'ca-app-pub-4333526146021563~5868530963'
+assert info['LanpixoAdEnvironment'] == '$(LANPIXO_AD_ENVIRONMENT)'
+assert '13.13.0' in (ROOT / 'ios/Lanpixo.xcodeproj/project.pbxproj').read_text()
 privacy = plistlib.loads((app / 'PrivacyInfo.xcprivacy').read_bytes())
 assert not privacy['NSPrivacyTracking']
 assert privacy['NSPrivacyAccessedAPITypes'][0]['NSPrivacyAccessedAPITypeReasons'] == ['CA92.1']

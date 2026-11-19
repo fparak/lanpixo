@@ -2,6 +2,8 @@ import SwiftUI
 import Network
 
 @MainActor final class AppModel: ObservableObject {
+    let ads = AdService()
+    @Published var selectedTab = 0
     @Published var devices: [Device] = []
     @Published var history: [ScanRecord] = []
     @Published var speeds: [SpeedResult] = []
@@ -26,6 +28,12 @@ import Network
     private let defaults = UserDefaults.standard
     var turkish: Bool { language == "tr" || (language == "system" && Locale.current.language.languageCode?.identifier == "tr") }
     func text(_ en: String, _ tr: String) -> String { turkish ? tr : en }
+    func changeTab(_ next: Int) {
+        guard !ads.busy else { return }
+        let leaving = selectedTab == 0 && next != 0 && !busy && status == "complete"
+        selectedTab = next
+        if leaving { ads.leaveResults() }
+    }
 
     init() {
         devices = restore("devices", fallback: [])
@@ -66,7 +74,7 @@ import Network
         devices.sort { (IPv4Subnet.number($0.ip) ?? 0) < (IPv4Subnet.number($1.ip) ?? 0) }
     }
     func scan() {
-        guard !busy else { return }
+        guard !busy, !ads.busy else { return }
         do {
             let current = try WiFiSnapshot.current(path: monitor.currentPath)
             let range = try current.subnet
@@ -130,16 +138,18 @@ import Network
         history.insert(ScanRecord(id: UUID(), date: Date(), subnet: subnet, count: devices.count, complete: complete), at: 0)
         history = Array(history.prefix(20)); save(history, key: "history"); persistDevices()
         snapshot = nil
+        if complete { ads.completedScan() }
     }
     func stop(reason: String = "cancelled") {
         guard busy else { return }
+        ads.finishCredit(completed: false)
         let wasScan = status == "scanning"
         runID = UUID(); operation?.cancel(); operation = nil; discovery.stop()
         if wasScan { finishScan(complete: false) }
         busy = false; snapshot = nil; status = reason
     }
     func speed() {
-        guard !busy else { return }
+        guard !busy, !ads.busy else { return }
         do { snapshot = try WiFiSnapshot.current(path: monitor.currentPath) }
         catch { status = "wifi"; return }
         busy = true; status = "latency"
@@ -155,17 +165,20 @@ import Network
             if runID == id { busy = false; snapshot = nil; operation = nil }
         }
     }
-    func ports(ip: String) {
-        guard !busy, !stale else { return }
+    func ports(ip: String, advanced: Bool = false) {
+        guard !busy, !stale, !ads.busy else { return }
         do {
             let current = try WiFiSnapshot.current(path: monitor.currentPath)
             guard try current.subnet.contains(ip) else { status = "changed"; return }
             snapshot = current
         } catch { status = "wifi"; return }
+        if advanced, !ads.reserveCredit() { status = "credit"; snapshot = nil; return }
         busy = true; status = "ports"; portResults = [:]
         let id = UUID(); runID = id
         operation = Task {
-            let ports: [UInt16] = [21,22,23,25,53,80,110,139,143,443,445,554,3389,8008,8009,9100]
+            let ports: [UInt16] = advanced
+                ? [20,21,22,23,25,53,67,68,69,80,81,88,110,111,123,135,137,138,139,143,161,179,389,443,445,465,500,515,548,554,587,631,636,873,993,995,1080,1194,1433,1521,1723,1883,2049,2375,3000,3306,3389,5000,5001,5060,5222,5353,5432,5900,5985,6379,8000,8008,8009,8080,8443,8883,9090,9100]
+                : [21,22,23,25,53,80,110,139,143,443,445,554,3389,8008,8009,9100]
             for port in ports {
                 guard !Task.isCancelled, runID == id else { return }
                 let result = await TCPProbe().run(ip: ip, port: port)
@@ -173,6 +186,7 @@ import Network
                 portResults[port] = result
             }
             guard runID == id else { return }
+            if advanced { ads.finishCredit(completed: true); ads.completedScan() }
             busy = false; snapshot = nil; operation = nil; status = "complete"
         }
     }
